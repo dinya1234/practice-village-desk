@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 248" width="1040" height="248" role="img" aria-labelledby="title desc">
+  <title id="title">ИнфоДон. Практика 01 — Диспетчерская посёлка</title>
+  <desc id="desc">Схема сигнала: звонок жителя проходит через диспетчера к исполнителю.</desc>
+  <rect width="1040" height="248" rx="20" fill="#123d36"/>
+  <path fill="none" stroke="#1e5047" stroke-width="1" d="M649 0v248m48-248v248m48-248v248m48-248v248m48-248v248m48-248v248m48-248v248m48-248v248M625 46h415M625 94h415M625 142h415M625 190h415"/>
+  <g font-family="sans-serif"><text x="42" y="47" fill="#a5e3c0" font-size="18" letter-spacing="2">ИнфоДон / Практика 01</text>
+  <text x="40" y="122" fill="#f3f8ef" font-size="53" font-weight="700">Диспетчерская</text>
+  <text x="40" y="181" fill="#f3f8ef" font-size="53" font-weight="700">посёлка</text>
+  <text x="42" y="218" fill="#bad4ca" font-size="16">Интерфейсы · IP-телефония</text></g>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="#c7fc84" stroke-width="4" d="M652 108h26l9-18 9 42 12-69 10 74 10-29h36"/>
+    <path stroke="#88b69e" stroke-width="3" d="M810 108h30q14 0 14-14V75q0-12 12-12h54m-110 45h30q14 0 14 14v29q0 12 12 12h54"/>
+    <circle cx="787" cy="108" r="22" stroke="#c7fc84" stroke-width="3"/>
+    <path d="M777 109v-2a10 10 0 0 1 20 0v8h-5m-15-8v8h3" stroke="#f3f8ef" stroke-width="3"/>
+    <circle cx="930" cy="63" r="8" fill="#c7fc84"/><circle cx="930" cy="163" r="8" fill="#88b69e"/>
+  </g>
+</svg>
