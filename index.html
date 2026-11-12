@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Практика · Диспетчерская посёлка</title>
+<style>
+  body { max-width: 46rem; margin: 2rem auto; padding: 0 1rem; font: 1.05rem/1.5 system-ui,sans-serif; color: #21352f; }
+  pre { padding: 1rem; background: #edf5f0; overflow: auto; font-size: .85rem; }
+</style>
+<main>
+  <h1>Диспетчерская посёлка</h1>
+  <p>Откройте README.md: там задание и два сценария для показа.</p>
+  <h2>Данные для старта</h2>
+  <p id="summary">Загрузка data.js…</p>
+  <details><summary>Посмотреть учебные записи</summary><pre id="sample"></pre></details>
+</main>
+<script src="data.js"></script>
+<script>
+  const data = window.villageData
+  document.querySelector('#summary').textContent = data
+    ? 'Жителей: ' + data.residents.length + '. Обращений: ' + data.tickets.length + '. Звонков: ' + data.calls.length + '.'
+    : 'Не удалось загрузить data.js. Распакуйте архив целиком.'
+  if (data) document.querySelector('#sample').textContent = JSON.stringify(data, null, 2)
+</script>
+</html>
