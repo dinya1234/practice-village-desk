@@ -1,0 +1,636 @@
+:root {
+  --ink: #16332c;
+  --muted: #5b7269;
+  --bg: #eef2ea;
+  --card: #ffffff;
+  --line: #d5dfd2;
+  --accent: #1f7a5c;
+  --accent-dark: #14553f;
+  --accent-soft: #e3f2e7;
+  --warn: #9a5a15;
+  --warn-soft: #fcefdc;
+  --progress: #2b4f88;
+  --progress-soft: #e5eefb;
+  --danger: #9c3b2e;
+  --danger-soft: #fbe9e5;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 1rem/1.5 system-ui, "Segoe UI", sans-serif;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.05rem;
+}
+
+h3 {
+  font-size: 1.02rem;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 1.2rem clamp(1rem, 3vw, 2rem) 0.6rem;
+}
+
+.brand {
+  display: grid;
+  gap: 0.25rem;
+  max-width: 38rem;
+}
+
+.eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pill {
+  border: 1px solid var(--line);
+  background: var(--card);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.notice-slot {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem);
+}
+
+.notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--card);
+}
+
+.notice.error {
+  border-color: #e5b6ad;
+  background: var(--danger-soft);
+  color: #78281f;
+}
+
+.notice.confirm {
+  border-color: #e8cda0;
+  background: var(--warn-soft);
+  color: #6d430f;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 19rem minmax(0, 1fr) 21rem;
+  grid-template-areas:
+    "incoming caller ticket"
+    "missed caller ticket"
+    "journal journal journal";
+  align-items: start;
+  gap: 1rem;
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0.6rem clamp(1rem, 3vw, 2rem) 1.5rem;
+}
+
+#incoming {
+  grid-area: incoming;
+}
+
+#missed {
+  grid-area: missed;
+}
+
+#caller {
+  grid-area: caller;
+}
+
+#ticket {
+  grid-area: ticket;
+}
+
+#journal {
+  grid-area: journal;
+}
+
+.panel {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  min-width: 0;
+  padding: 0.9rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.panel-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.count {
+  min-width: 1.6rem;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.label {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.block-label {
+  padding-top: 0.2rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.btn {
+  padding: 0.42rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  background: #f4f8f2;
+}
+
+.btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.btn.primary:hover {
+  border-color: var(--accent-dark);
+  background: var(--accent-dark);
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+.btn.small {
+  padding: 0.26rem 0.6rem;
+  font-size: 0.82rem;
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn:focus-visible,
+.line-btn:focus-visible,
+.ringing:focus-visible,
+.ticket-open:focus-visible,
+.link:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sim {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.2rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--line);
+}
+
+.lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.line-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fafcf8;
+  text-align: left;
+  cursor: pointer;
+}
+
+.line-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.line-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.line {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: #e9f0f7;
+  color: #24506b;
+  font-family: ui-monospace, "Cascadia Code", monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.ringing {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid #e3b980;
+  border-radius: 10px;
+  background: #fdf6e9;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ringing:hover {
+  border-color: #c99a52;
+}
+
+.ringing:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.call-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.row-between {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.ring-name {
+  font-weight: 650;
+}
+
+.ring-text {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.time {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.badge.open {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.badge.progress {
+  background: var(--progress-soft);
+  color: var(--progress);
+}
+
+.badge.done {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.badge.accepted {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+.badge.missed {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.badge.callback {
+  background: #efe9fb;
+  color: #553a92;
+}
+
+.caller-name {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.quote {
+  padding: 0.5rem 0.7rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 9px 9px 0;
+  background: #f4f8f2;
+  font-size: 0.95rem;
+}
+
+.ticket-rows {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ticket-row {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fbfcf8;
+}
+
+.ticket-row .btn {
+  justify-self: start;
+}
+
+.ticket-open {
+  display: grid;
+  gap: 0.15rem;
+  justify-items: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ticket-subject {
+  font-weight: 650;
+}
+
+.ticket-open:hover .ticket-subject {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+.ticket-meta {
+  color: var(--muted);
+  font-size: 0.83rem;
+}
+
+.ticket-result {
+  color: var(--accent-dark);
+  font-size: 0.83rem;
+}
+
+.form {
+  display: grid;
+  gap: 0.5rem;
+  padding-top: 0.7rem;
+  border-top: 1px dashed var(--line);
+}
+
+.field {
+  display: grid;
+  gap: 0.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.field input,
+.field textarea {
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.5rem;
+  padding: 0.55rem 0;
+  border-top: 1px dashed var(--line);
+  border-bottom: 1px dashed var(--line);
+}
+
+.facts div {
+  display: grid;
+  gap: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.fact-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.calls,
+.journal,
+.queue {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.calls li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #eef2ea;
+  font-size: 0.85rem;
+}
+
+.calls li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.result {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  background: var(--accent-soft);
+}
+
+.queue li {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #ecc9c1;
+  border-radius: 10px;
+  background: #fdf5f3;
+}
+
+.queue li .btn {
+  justify-self: start;
+}
+
+.queue-name {
+  font-weight: 650;
+}
+
+.queue-text {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.journal li {
+  display: grid;
+  grid-template-columns: 8.5rem 6.5rem minmax(0, 1fr) auto auto;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid #eef2ea;
+  font-size: 0.86rem;
+}
+
+.journal li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-dark);
+  font-size: inherit;
+  font-weight: 650;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.foot {
+  max-width: 76rem;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 3vw, 2rem) 1.5rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 1080px) {
+  .grid {
+    grid-template-columns: 18rem minmax(0, 1fr);
+    grid-template-areas:
+      "incoming caller"
+      "missed caller"
+      "ticket ticket"
+      "journal journal";
+  }
+}
+
+@media (max-width: 720px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "incoming"
+      "caller"
+      "missed"
+      "ticket"
+      "journal";
+  }
+
+  .journal li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.15rem;
+  }
+}
