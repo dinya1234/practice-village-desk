@@ -1,20 +1,28 @@
 (function () {
   'use strict'
 
-  const STORAGE_KEY = 'village-desk:practice-01'
   const STATUS_OPEN = 'Открыто'
   const STATUS_PROGRESS = 'В работе'
   const STATUS_DONE = 'Выполнено'
   const OUTCOME_ACCEPTED = 'Принят'
   const OUTCOME_MISSED = 'Пропущен'
   const OUTCOME_CALLBACK = 'Перезвонили'
+  const TOKEN_KEY = 'village-desk:token'
 
   let state = null
+  let account = null
+  let version = 0
   let view = { type: 'idle' }
   let selectedTicketId = null
   let notice = null
+  let saveChain = Promise.resolve()
 
   const els = {
+    login: document.querySelector('#login'),
+    loginForm: document.querySelector('#login-form'),
+    loginError: document.querySelector('#login-error'),
+    workspace: document.querySelector('#workspace'),
+    who: document.querySelector('#who'),
     notice: document.querySelector('#notice'),
     incoming: document.querySelector('#incoming'),
     missed: document.querySelector('#missed'),
@@ -175,43 +183,161 @@
     return next
   }
 
-  function seedState() {
-    const source = window.villageData || {}
-    return normalize(JSON.parse(JSON.stringify({
-      residents: source.residents || [],
-      workers: source.workers || [],
-      tickets: source.tickets || [],
-      calls: source.calls || [],
-      queue: [],
-      current: null,
-      usedLines: []
-    })))
+  function readToken() {
+    try {
+      return sessionStorage.getItem(TOKEN_KEY) || ''
+    } catch (error) {
+      return ''
+    }
   }
 
-  function load() {
-    let raw = null
+  function writeToken(value) {
     try {
-      raw = localStorage.getItem(STORAGE_KEY)
+      if (value) sessionStorage.setItem(TOKEN_KEY, value)
+      else sessionStorage.removeItem(TOKEN_KEY)
     } catch (error) {
-      raw = null
-    }
-    if (!raw) {
-      state = seedState()
       return
     }
+  }
+
+  async function api(path, options) {
+    const headers = { 'Content-Type': 'application/json' }
+    const token = readToken()
+    if (token) headers.Authorization = 'Bearer ' + token
+    const response = await fetch(path, Object.assign({ headers: headers }, options || {}))
+    let data = null
     try {
-      state = normalize(JSON.parse(raw))
+      data = await response.json()
     } catch (error) {
-      state = seedState()
+      data = null
     }
+    return { response: response, data: data }
+  }
+
+  function showLogin(message) {
+    writeToken('')
+    account = null
+    state = null
+    version = 0
+    view = { type: 'idle' }
+    selectedTicketId = null
+    notice = null
+    els.workspace.hidden = true
+    els.login.hidden = false
+    els.loginError.hidden = !message
+    els.loginError.textContent = message || ''
+    const field = els.loginForm.querySelector('[name="login"]')
+    if (field) field.focus()
+  }
+
+  function applySnapshot(data) {
+    account = data.account
+    version = data.version
+    state = normalize(data.state)
+    els.who.textContent = account ? account.name + ' · ' + account.shift : ''
+    els.login.hidden = true
+    els.workspace.hidden = false
+    if (state.current) {
+      view = { type: 'incoming', callId: state.current.id }
+      const resident = residentOfLine(state.current.line)
+      const tickets = resident ? ticketsOf(resident.id) : []
+      if (tickets.length) selectedTicketId = tickets[0].id
+    }
+  }
+
+  async function boot() {
+    let result = null
+    try {
+      result = await api('/api/bootstrap')
+    } catch (error) {
+      if (!account) showLogin('Сервер не отвечает. Запустите приложение и обновите страницу.')
+      return
+    }
+    if (result.response.status === 401 || (result.data && !result.data.account)) {
+      if (!account) showLogin('')
+      return
+    }
+    if (!result.response.ok || !result.data) {
+      if (!account) showLogin('Сервер не отвечает. Запустите приложение и обновите страницу.')
+      return
+    }
+    applySnapshot(result.data)
+    render()
+  }
+
+  async function submitLogin(form) {
+    const data = new FormData(form)
+    els.loginError.hidden = true
+    let result = null
+    try {
+      result = await api('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({
+          login: String(data.get('login') || '').trim(),
+          password: String(data.get('password') || '')
+        })
+      })
+    } catch (error) {
+      els.loginError.hidden = false
+      els.loginError.textContent = 'Сервер не отвечает. Запустите приложение.'
+      return
+    }
+    if (!result.response.ok || !result.data) {
+      els.loginError.hidden = false
+      els.loginError.textContent = result.data && result.data.error
+        ? result.data.error
+        : 'Не удалось войти'
+      return
+    }
+    form.reset()
+    writeToken(result.data.token || '')
+    applySnapshot(result.data)
+    render()
+  }
+
+  async function logout() {
+    try {
+      await api('/api/logout', { method: 'POST' })
+    } catch (error) {
+      notice = null
+    }
+    writeToken('')
+    showLogin('')
   }
 
   function save() {
+    saveChain = saveChain.then(pushState).catch(function () {})
+  }
+
+  async function pushState() {
+    let result = null
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+      result = await api('/api/state', {
+        method: 'PUT',
+        body: JSON.stringify({ version: version, state: state })
+      })
     } catch (error) {
-      notice = { kind: 'error', text: 'Браузер не разрешил сохранить данные. Изменения останутся только до перезагрузки.' }
+      notice = { kind: 'error', text: 'Сервер не отвечает, изменения не сохранены.' }
+      renderNotice()
+      return
     }
+    if (result.response.status === 401) {
+      showLogin('Сессия завершилась. Войдите снова.')
+      return
+    }
+    if (result.response.status === 409 && result.data) {
+      version = result.data.version
+      state = normalize(result.data.state)
+      notice = { kind: 'error', text: 'Другой диспетчер уже изменил данные. Экран обновлён, повторите действие.' }
+      render()
+      return
+    }
+    if (!result.response.ok || !result.data) {
+      notice = { kind: 'error', text: 'Не удалось сохранить данные. Проверьте, что сервер запущен.' }
+      renderNotice()
+      return
+    }
+    version = result.data.version
   }
 
   function render() {
@@ -466,7 +592,7 @@
           : '<span class="hint">без обращения</span>'
         return '<li><span class="time">' + esc(formatTime(call.at)) + '</span>' +
           '<span class="line">' + esc(call.line) + '</span>' +
-          '<span>' + esc(nameFor(call)) + '</span>' +
+          '<span>' + esc(nameFor(call)) + (call.by ? ' · ' + esc(call.by) : '') + '</span>' +
           outcomeBadge(call.outcome) +
           '<span>' + link + '</span></li>'
       }).join('')
@@ -548,6 +674,7 @@
       ticketId: null,
       outcome: OUTCOME_MISSED,
       text: call.text || '',
+      by: account ? account.name : '',
       resolvedBy: null
     })
     state.queue = state.queue.filter(function (item) { return item.id !== call.id })
@@ -585,6 +712,7 @@
       ticketId: ticketId,
       outcome: isCallback ? OUTCOME_CALLBACK : OUTCOME_ACCEPTED,
       text: source.text || '',
+      by: account ? account.name : '',
       resolvedBy: null
     }
     if (isCallback) {
@@ -689,12 +817,30 @@
     render()
   }
 
-  function resetDemo() {
-    state = seedState()
+  async function resetDemo() {
+    await saveChain
+    let result = null
+    try {
+      result = await api('/api/reset', { method: 'POST' })
+    } catch (error) {
+      notice = { kind: 'error', text: 'Сервер не отвечает, сбросить данные не удалось.' }
+      render()
+      return
+    }
+    if (result.response.status === 401) {
+      showLogin('Сессия завершилась. Войдите снова.')
+      return
+    }
+    if (!result.response.ok || !result.data) {
+      notice = { kind: 'error', text: 'Не удалось сбросить данные.' }
+      render()
+      return
+    }
+    state = normalize(result.data.state)
+    version = result.data.version
     view = { type: 'idle' }
     selectedTicketId = null
     notice = null
-    save()
     render()
   }
 
@@ -729,6 +875,8 @@
     } else if (action === 'notice-close') {
       notice = null
       renderNotice()
+    } else if (action === 'logout') {
+      logout()
     }
   })
 
@@ -748,12 +896,10 @@
     }
   })
 
-  load()
-  if (state.current) {
-    view = { type: 'incoming', callId: state.current.id }
-    const resident = residentOfLine(state.current.line)
-    const tickets = resident ? ticketsOf(resident.id) : []
-    if (tickets.length) selectedTicketId = tickets[0].id
-  }
-  render()
+  els.loginForm.addEventListener('submit', function (event) {
+    event.preventDefault()
+    submitLogin(els.loginForm)
+  })
+
+  boot()
 })()

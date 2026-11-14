@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Диспетчерская посёлка</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<div id="login" class="login" hidden>
+  <form id="login-form" class="login-card">
+    <p class="eyebrow">ИнфоДон · практика 01</p>
+    <h1>Диспетчерская посёлка</h1>
+    <p class="hint">Вход диспетчера. Журнал звонков и обращения общие для обеих смен.</p>
+    <label class="field">Логин
+      <input name="login" autocomplete="username" required>
+    </label>
+    <label class="field">Пароль
+      <input name="password" type="password" autocomplete="current-password" required>
+    </label>
+    <p id="login-error" class="login-error" hidden></p>
+    <button type="submit" class="btn primary">Войти</button>
+  </form>
+</div>
+<div id="workspace" class="workspace" hidden>
+  <header class="top">
+    <div class="brand">
+      <p class="eyebrow">ИнфоДон · практика 01</p>
+      <h1>Диспетчерская посёлка</h1>
+      <p class="hint">Звонки имитируются кнопками, жители и линии вымышлены. Данные общие для обеих смен.</p>
+    </div>
+    <div class="top-actions">
+      <span class="pill" id="who"></span>
+      <button type="button" class="btn ghost" data-action="logout">Выйти</button>
+      <button type="button" class="btn ghost" data-action="reset">Сбросить демо</button>
+    </div>
+  </header>
+  <div id="notice" class="notice-slot" aria-live="polite"></div>
+  <main class="grid">
+    <section id="incoming" class="panel"></section>
+    <section id="caller" class="panel"></section>
+    <section id="ticket" class="panel"></section>
+    <section id="missed" class="panel"></section>
+    <section id="journal" class="panel"></section>
+  </main>
+  <footer class="foot">
+    <p>Звонки имитируются кнопками. Линии не являются телефонными номерами. Данные хранятся на локальном сервере и видны обеим сменам.</p>
+  </footer>
+</div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

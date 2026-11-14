@@ -634,3 +634,45 @@ textarea:focus-visible {
     gap: 0.15rem;
   }
 }
+
+.workspace {
+  display: contents;
+}
+
+.workspace[hidden] {
+  display: none;
+}
+
+.login {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.login[hidden] {
+  display: none;
+}
+
+.login-card {
+  display: grid;
+  gap: 0.75rem;
+  width: min(24rem, 100%);
+  padding: 1.4rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.login-error {
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #e5b6ad;
+  border-radius: 9px;
+  background: var(--danger-soft);
+  color: #78281f;
+  font-size: 0.85rem;
+}
+
+.login-error[hidden] {
+  display: none;
+}
