@@ -8,6 +8,7 @@
 
 **[Ветка practice в форке →](https://github.com/dinya1234/practice-village-desk/tree/practice)**
 
+
 ## Запуск
 
 1. Нужен JDK 21 или новее. Maven и Gradle устанавливать не нужно: в проекте есть Maven Wrapper.
@@ -95,4 +96,4 @@
 
 - Прототип — в ветке `practice` этого форка: [открыть ветку](https://github.com/dinya1234/practice-village-desk/tree/practice).
 - Инструкция запуска, аккаунты и сценарии — в этом файле.
-- Видео с показом трёх сценариев прикладывается отдельно.
+- **[Видео с показом трёх сценариев прикладывается отдельно. →]([https://github.com/dinya1234/practice-village-desk/tree/practice](https://drive.google.com/file/d/1bxA1dJf7Bu4sMceElnmGGJbUQRek-8DK/view?usp=drive_link))**
